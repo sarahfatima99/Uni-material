@@ -1,0 +1,248 @@
+Q1:
+#include<iostream>
+
+using namespace std;
+
+int mul(int n,int m) {
+	if(m==0) return 0;
+	else return n + mul(n,m-1);
+}
+
+int main() {
+    cout<<mul(4,4); //6
+}
+
+-------------------------------------
+
+Q2:
+#include<iostream>
+
+using namespace std;
+
+void RevStr(string s,int i) {
+	if(i == s.size()) return;
+	else {
+		RevStr(s,i+1);
+		cout<<s[i];
+	}
+}
+
+int main() {
+    string s = "Hello world";
+    RevStr(s,0);
+}
+
+
+------------------------------------
+
+Q3:
+#include<iostream>
+
+using namespace std;
+
+int main() {
+	// limit is 10, mean max element in an array can be 10. you can increase this.
+	// the solution is simple hashing approach
+    int arr[] = {1,2,1,1,1,2,3,4,4,4,4,8};
+    int dupFrequency[10+1];
+    for(int i=0;i<=10;i++) dupFrequency[i] = 0;
+    for(int i=0;i<(sizeof(arr)/sizeof(arr[0]));i++) dupFrequency[arr[i]]++;
+    for(int i=0;i<=10;i++) {
+    	if(dupFrequency[i])
+		cout<<i<<" Repeated "<<dupFrequency[i]<<" Times"<<endl;
+	}
+}
+
+
+-------------------------------------------
+
+Q4:
+#include<iostream>
+
+using namespace std;
+
+int findMin(int small,int arr[],int n,int i) {
+	if(i==n-1) return small;
+	if(small>arr[i]) small = arr[i];
+	return findMin(small,arr,n,i+1);
+}
+
+int main() {
+    int arr[] = {8,12,4,5,2,1,99,100};
+    int n = 8;
+    int small = arr[0];
+    cout<<"Min is "<<findMin(small,arr,n,0);
+}
+
+
+----------------------------------------------------
+
+Q5:
+#include<iostream>
+#include<cstdlib>
+
+using namespace std;
+
+int main() {
+    int arr[100];
+    // randomly generating numbers
+    for(int i=0;i<100;i++) arr[i] = rand()%100;
+    // suppose first element is in top 75 
+    int top75 = arr[0];
+    // do more 25 comparisions to get the result
+    for(int i=1;i<26;i++) { // 26-1 = 25
+    	if(top75<arr[i]) top75 = arr[i];
+	}
+	cout<<"Element is "<<top75;
+}
+
+
+------------------------------------------------------
+
+Q6:
+#include<iostream>
+
+using namespace std;
+
+int SumOfDigits(int x) {
+	if(x==0) return 0;
+	else return x%10 + SumOfDigits(x/10);
+}
+
+int main() {
+    int n = 1234;
+    cout<<"Sum of digits is "<<SumOfDigits(n);
+}
+
+
+-------------------------------------------------------
+
+Q7:
+#include<iostream>
+
+using namespace std;
+
+int main() {
+    // you can change or take input from user
+    int arr[] = {1,2,3,4,5};
+    int k = 4,n = 5;
+    cout<<"Right shift: \n";
+    for(int j=0;j<k;j++) {
+    	int a = arr[n-1];
+    	for(int i=n-1;i>=0;i--) arr[i] = arr[i-1];
+    	arr[0] = a;
+	}
+	for(int i =0;i<n;i++) cout<<arr[i]<<" ";
+	cout<<"\nLeft Shift: \n";
+	for(int j=0;j<k;j++) {
+    	int a = arr[0];
+    	for(int i=0;i<n;i++) arr[i] = arr[i+1];
+    	arr[n-1] = a;
+	}
+	for(int i =0;i<n;i++) cout<<arr[i]<<" ";
+
+}
+
+------------------------------------------------------------
+
+Q8:
+
+#include<iostream>
+
+using namespace std;
+
+void printStr(string s,int limit,int n) {
+	if(limit <= 0 || n<0) return;
+	else {
+		printStr(s,limit-1,n-1);
+		cout<<s[n];
+	}
+}
+
+int main() {
+    string a = "hhhhahmediaiia";
+    string b = "isadahmedasdasdasdasdasd";
+    int n1 = a.size(),row=0,col=0,maxVal=0;
+    int n2 = b.size();
+    int arr[n1][n2];
+    for(int i=0;i<n1;i++) for(int j=0;j<n2;j++) arr[i][j] = 0;
+    for(int i=0;i<n1;i++) {
+    	for(int j=0;j<n2;j++) {
+    		if(a[i] == b[j]) {
+    			if(j==0 || i==0) arr[i][j] = 1;
+    			else arr[i][j] = arr[i-1][j-1]+1;
+				if(maxVal<arr[i][j]) {
+					maxVal = arr[i][j];
+					row = i,col = j;
+				}
+			}
+		}
+	}
+	// now using recursion to get the longest common substring
+	cout<<"Longest common subsequence is: ";
+	printStr(a,maxVal,col);
+
+}
+
+
+------------------------------------------------------------------------
+
+Q9:
+
+#include<iostream>
+#include<cmath>
+
+using namespace std;
+
+float result(float n,float ans,float cur) {
+	if(n==cur) return ans;
+	else return result(n,pow(-1,n)*(1/cur),cur+1);
+}
+
+int main() {
+    float n = 10;
+    cout<<"Result of nth term: "<<result(n,0,1); // result will always less than 1
+}
+
+-----------------------------------------------------------------------------
+SPECIAL PROBLEM (Q6 which I shared in group)
+Q: use recursion to put commas in a number. eg. 1234567 should return a string 1,234,567
+
+#include<iostream>
+
+using namespace std;
+typedef unsigned long long ull;
+int j = 3;
+char itoss(int n) {
+	char c = n+'0';
+	return c;
+}
+int nocomas(string s) {
+	int count = 0 ;
+	for(int j=0;j<s.size();j++) if(s[j]==',') count++;
+	return count;
+}
+string func(int num,string str) {
+	if(num==0) {
+		string str2 = "";
+		for(int i=str.size()-1;i>=0;i--) str2 += str[i];
+		return str2;
+	}
+	if((str.size()-nocomas(str))%3==0  && str.size()>0){
+		str += ",";
+	}
+	str += itoss(num%10);
+	return func(num/10,str);
+}
+
+int main() {
+    
+    int n = 1234567891;
+    string s = "";
+    s= func(n,s);
+    cout<<s;
+}
+
+--------------------------------------------------------------------
+happy coding!
+https://github.com/muhammad4hmed

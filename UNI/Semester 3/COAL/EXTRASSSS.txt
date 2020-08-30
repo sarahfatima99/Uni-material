@@ -1,0 +1,88 @@
+.................EQUALITY OF ARRAYS...................
+INCLUDE Irvine32.inc
+.data
+msg1 BYTE "EQUALLLLLLL!",0
+msg2 BYTE "NOT EQUALLLLLLL!",0
+arr1 WORD 10,20,30,40
+arr2 WORD 10,20,30,40
+
+.code
+main PROC
+MOV EAX,0
+MOV EBX,LENGTHOF arr1
+MOV ECX,0
+MOV EDX,0
+MOV ESI,-1 
+L1:
+	MOV EAX, ESI
+	ADD EAX,2
+	CMP EAX,EBX
+	JE equal
+	INC ESI
+	MOV EAX,0
+	MOV AL,arr1[TYPE arr1*ESI]
+	CMP AL,arr2[TYPE arr2*ESI]
+	JE L1
+	MOV EDX,OFFSET msg2
+	call WriteString
+	exit
+equal:
+MOV EDX,OFFSET msg1
+call WriteString
+exit
+
+call DumpRegs
+main ENDP
+END main
+........................................NEED TO WORK ON 21 WALA QUESTION..................................
+
+INCLUDE Irvine32.inc
+.data
+var1 DWORD ?
+var2 DWORD ?
+LIMIT DWORD 1d
+msg1 BYTE 'ENTER value for EAX: ',0
+msg2 BYTE 'ENTER value for multiplier: ',0
+
+.code
+
+main PROC
+mov ecx,0
+MOV EDX, OFFSET msg1
+call WriteString
+call ReadInt 
+MOV var1,EAX
+MOV EDX, OFFSET msg2
+call WriteString
+call ReadInt 
+MOV var2,EAX
+MOV EBX,0
+MOV EDX,1
+L1:
+	SHL EDX,1
+	INC ECX
+	CMP EAX,EDX
+	JA L1
+
+SHR EDX,1
+mov limit, ecx
+L2:
+	DEC ECX
+	MOV EDX,1
+	SHL EDX,CL
+	CMP EAX,EDX
+	JB L3
+	JAE L2
+L3:
+	ADD EBX,EDX
+	SUB EAX,EDX
+	CMP EAX,EAX
+	JE L2
+
+MOV EAX,EBX
+call WriteInt           
+
+;call DumpRegs
+exit
+main ENDP
+END main  

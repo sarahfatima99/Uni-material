@@ -1,0 +1,456 @@
+DIVISION OF GREATER THAN BYTE:
+INCLUDE Irvine32.inc
+.data
+
+val1  WORD 8
+
+
+.code
+
+main PROC
+MOV EAX,0
+MOV EDX,0;necessary to store remainder in it
+mov ax,21
+div val1
+
+call DumpRegs
+;call WriteDec
+exit
+main ENDP
+END main
+
+DIVISION OF  BYTE:
+INCLUDE Irvine32.inc
+.data
+
+val1  BYTE 8
+
+
+.code
+
+main PROC
+MOV EAX,0
+
+mov al,21
+div val1
+
+call DumpRegs
+;call WriteDec
+exit
+main ENDP
+END main
+
+...........EXCHANGING AX with upper 4 bytes.......
+INCLUDE Irvine32.inc
+.data
+num DWORD 12345678h
+
+
+.code
+
+main PROC
+MOV EAX,0
+MOV ECX,0
+MOV EBX,0
+MOV EBX,num
+MOV EDX,10000 h
+MOV AX,BX
+MOVZX ECX, WORD PTR [num+2]
+mul EDX
+
+ADD EAX,ECX
+XCHG num,EAX
+
+
+call DumpRegs
+call WriteDec
+exit
+main ENDP
+END main  
+
+............MOVING WORD ARRAY TO DWORD ARRAY.........
+INCLUDE Irvine32.inc
+.data
+arr WORD 12,13,14,15
+arr2 DWORD ?,?,?,?
+count BYTE ?
+count2 BYTE ?
+
+.code
+
+main PROC
+MOV EAX,0
+mov ecx,4
+MOV ESI,0
+MOV EDI,0
+L1:
+	MOVZX EAX , [arr+ESI]
+	MOV [arr2+EDI],EAX
+	add ESI,2
+	add EDI,4
+	loop L1
+
+call DumpRegs
+call WriteDec
+exit
+main ENDP
+END main  
+.............FABBONACI..............
+INCLUDE Irvine32.inc
+.data
+
+arr2 DWORD ?,?,?,?
+
+
+.code
+
+main PROC
+MOV EAX,0
+mov ecx,10
+MOV EBX,1
+MOV EDX,1
+MOV ESI,0
+MOV EDI,0
+
+MOV [arr2+ESI],EBX
+L1:
+	MOV [arr2+ESI+4],EDX
+	ADD EDX, EBX
+	MOV EBX,EDX
+	ADD ESI,4
+	loop L1
+
+call DumpRegs
+call WriteDec
+exit
+main ENDP
+END main
+
+...................Printing uppercase and lowercase characters...................
+
+INCLUDE Irvine32.inc
+.data
+a BYTE 'A'
+b BYTE 'a'
+
+
+.code
+
+main PROC
+MOV EAX,0
+MOV EBX,0
+MOV ECX,26
+L1:
+	MOV AL,a
+	call	WriteChar
+	MOV AL,b
+	call	WriteChar
+	call	Crlf
+	INC a
+	INC b
+	loop L1	
+
+
+
+
+call DumpRegs
+exit
+main ENDP
+END main
+
+...................EVEN AND ODD...........
+
+INCLUDE Irvine32.inc
+.data
+a BYTE 0d
+b BYTE 1d
+msg1 BYTE 'EVEN NUMBERS',0
+msg2 BYTE 'ODD NUMBERS',0
+.code
+
+main PROC
+MOV EAX,0
+
+MOV EDX,OFFSET msg1
+call WriteString
+call Crlf
+MOV AL,a
+MOV ECX,20
+L1:
+	call WriteDec
+	ADD EAX,2
+	call Crlf
+	loop L1
+MOV EDX,OFFSET msg2
+call WriteString
+call Crlf
+MOV AL,b
+MOV ECX,20
+L2:
+	call WriteDec
+	ADD EAX,2
+	call Crlf
+	loop L2
+
+
+
+
+
+call DumpRegs
+exit
+main ENDP
+END main
+.............MULTIPLICATION TABLE..............
+INCLUDE Irvine32.inc
+.data
+
+msg1 BYTE "ENTER NUMBER: ",0
+num DWORD ?
+
+
+.code
+
+main PROC
+MOV EAX,0
+MOV EBX,1
+
+MOV EDX,OFFSET msg1
+call WriteString
+call ReadDec
+MOV num,EAX
+MOV ECX,10
+L1: 
+	MOV EAX,num
+	call WriteDec
+	MOV EAX,'x'
+	call WriteChar
+	MOV EAX,EBX
+	call WriteDec
+	MOV EAX,'='
+	call WriteCHar
+	MOV EAX,num
+	MUL EBX
+	call WriteDec
+	INC EBX
+	call Crlf
+	
+	loop L1
+
+
+call DumpRegs
+exit
+main ENDP
+END main
+
+..................pattern................
+include Irvine32.inc
+
+.data
+
+	
+star BYTE '*'
+	
+row DWORD ?
+	
+col DWORD ?
+
+
+.code
+
+	
+main PROC
+
+	
+	
+
+	
+	
+CALL ReadDec
+
+		
+MOV row, EAX
+		
+CALL ReadDec
+		
+MOV col, EAX
+
+		
+CALL CRLF
+
+		
+MOV ECX, row
+
+		
+L1:
+			
+		
+	MOV EBX, ECX
+		
+	MOV ECX, col
+
+		
+	L2:
+
+			
+		MOV AL, star
+		
+		CALL WriteChar
+
+
+		LOOP L2
+
+		
+	CALL CRLF
+
+		
+	DEC col
+
+		
+	MOV ECX, EBX
+
+	
+	LOOP L1
+
+		
+;CALL DUMPREGS
+
+		
+exit
+
+	
+main ENDP
+
+	
+END main
+....................CALCULATOR.............
+INCLUDE Irvine32.inc
+.data
+
+msg1 BYTE "ENTER NUMBER: ",0
+mutliply BYTE "MUTIPLICATION ANSWER:",0
+addition BYTE "ADDITION ANSWER:",0
+divide BYTE "DIVISION ANSWER:",0
+Subtract BYTE "SUBTRACTION ANSWER:",0
+num1 SDWORD 5
+num2 SDWORD 3
+
+.code
+
+main PROC
+MOV EAX,0
+push num1
+push num2
+call ADDITION1
+call MULTIPLICATION1
+call SUBTRACTION1
+call DIVISION1
+pop num2
+pop num1
+
+call DumpRegs
+exit
+main ENDP
+
+	
+ADDITION1 PROC
+PUSH EBP
+MOV EBP,ESP
+MOV EAX,[EBP+8]
+MOV EBX,[EBP+12]
+ADD EAX,EBX
+MOV EDX, OFFSET addition
+call WriteString
+call WriteInt
+call Crlf
+POP EBP
+ret
+ADDITION1 ENDP
+
+MULTIPLICATION1 PROC
+PUSH EBP
+MOV EBP,ESP
+MOV EAX,[EBP+8]
+MOV EBX,[EBP+12]
+IMUL EAX,EBX
+MOV EDX, OFFSET mutliply 
+call WriteString
+call WriteInt
+call Crlf
+POP EBP
+ret
+MULTIPLICATION1 ENDP
+
+SUBTRACTION1 PROC
+PUSH EBP
+MOV EBP,ESP
+MOV EBX,[EBP+8]
+MOV EAX,[EBP+12]
+SUB EAX,EBX
+MOV EDX, OFFSET Subtract 
+call WriteString
+call WriteInt
+call Crlf
+POP EBP
+ret
+SUBTRACTION1 ENDP
+
+
+DIVISION1 PROC
+PUSH EBP
+MOV EBP,ESP
+MOV EDX,0
+MOV EBX,[EBP+8]
+MOV EAX,[EBP+12]
+div EBX
+MOV EDX, OFFSET divide 
+call WriteString
+call WriteInt
+call Crlf
+POP EBP
+ret
+DIVISION1 ENDP
+
+END main
+
+................FACTORIAL.............
+INCLUDE Irvine32.inc
+.data
+
+msg1 BYTE "THE FACTORIAL IS: ",0
+num1 DWORD 5
+ANS DWORD ?
+
+.code
+
+main PROC
+MOV EAX,0
+push ANS
+push num1
+call Factorial
+pop num1
+pop ANS
+
+call DumpRegs
+exit
+main ENDP
+
+Factorial PROC
+push EBP
+MOV EBP,ESP
+MOV EAX,[EBP+8]
+MOV ECX,EAX
+SUB ECX,1
+MOV EBX,ECX
+L1:
+	MUL EBX
+	DEC EBX
+	loop L1
+MOV [EBP+12],EAX
+MOV EDX,OFFSET msg1
+call WriteString
+call WriteDec
+pop EBP
+ret
+Factorial ENDP
+	
+END main

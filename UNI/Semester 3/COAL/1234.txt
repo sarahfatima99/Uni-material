@@ -1,0 +1,130 @@
+INCLUDE Irvine32.inc
+.data
+arr1	 BYTE 1,2,3
+row_size BYTE ($-arr1)
+	 	 BYTE 3,4,5
+		 BYTE 5,6,7
+_row	 BYTE ?
+_col	 BYTE ?
+.code
+main PROC
+call ReadDec
+MOV _row ,AL
+mov EDI,OFFSET arr1
+MOV ESI,EDI
+MOV ECX,LENGTHOF arr1
+cld
+L1:
+	LODSB
+	mul multi
+	STOSB
+loop L1
+
+exit
+main ENDP
+
+END main
+
+
+
+
+..............................................................................
+INCLUDE Irvine32.inc
+.data
+ searching BYTE	'school!pencil!pen!bag!book!',0
+ string	 BYTE	2000 DUP(?),0
+ count	 BYTE	0
+ length1 BYTE	0
+ length2 BYTE	0
+
+.code  
+COUNT_SEARCH PROC,
+search :PTR BYTE, search_length:BYTE, searchstring: PTR BYTE, string_length:WORD 
+MOVZX ECX,string_length
+MOVZX EDX,search_length
+SUB EDX,1
+MOV ESI,searchstring
+MOV EDI,search
+
+L1:
+	MOV AL,[EDI]
+	CMP AL,[ESI]
+	JNE _ClearSearch
+	_ComeBack1:
+	INC ESI
+	INC EDI
+	MOV EBX,EDI
+	SUB EBX,search
+	CMP EBX,EDX
+	JE _IncreaseCount
+	_ComeBack2:
+	loop L1
+JMP _out
+
+_ClearSearch:
+	MOV EDI,search
+	JMP _ComeBack1
+
+_IncreaseCount:
+	ADD count,1
+	JMP _ComeBack2
+
+_out:
+ret
+COUNT_SEARCH ENDP
+
+main PROC 
+MOV EDX,OFFSET string
+MOV ECX,2000
+call ReadString
+MOV ECX,5
+MOV ESI,OFFSET searching
+MOV EDI,ESI
+L1:
+	MOV EDI,ESI
+	MOV length1,1
+	L2:
+		MOV AL,'!'
+		INC length2
+		CMP AL,[ESI]
+		JE _outL1
+		INC ESI
+		INC length1
+		JMP L2
+	_outL1:
+	MOV AL, LENGTHOF searching
+	CMP AL,length2
+	JE _Seaching0
+	_ComeBack4:
+	PUSH EAX
+	PUSH EBX
+	PUSH ECX
+	PUSH EDX
+	PUSH ESI
+	PUSH EDI
+	INVOKE COUNT_SEARCH,EDI,length1,OFFSET string, LENGTHOF string 
+	POP EDI
+	POP ESI
+	POP EDX
+	POP ECX
+	POP EBX
+	POP EAX
+	INC ESI
+	loop L1
+
+MOV EAX,0
+MOV AL,count
+call WriteDec
+call Crlf
+MOV EDX,OFFSET string
+call WriteString
+exit
+_Seaching0:
+MOV ESI,OFFSET searching
+MOV length2,0
+JMP _ComeBack4
+
+;call DumpRegs 
+;exit  
+main ENDP 
+END main

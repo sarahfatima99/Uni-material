@@ -1,0 +1,161 @@
+DIVISION OF GREATER THAN BYTE:
+INCLUDE Irvine32.inc
+.data
+
+val1  WORD 8
+
+
+.code
+
+main PROC
+MOV EAX,0
+MOV EDX,0;necessary to store remainder in it
+mov ax,21
+div val1
+
+call DumpRegs
+;call WriteDec
+exit
+main ENDP
+END main
+
+DIVISION OF  BYTE:
+INCLUDE Irvine32.inc
+.data
+
+val1  BYTE 8
+
+
+.code
+
+main PROC
+MOV EAX,0
+
+mov al,21
+div val1
+
+call DumpRegs
+;call WriteDec
+exit
+main ENDP
+END main
+
+...........EXCHANGING AX with upper 4 bytes.......
+INCLUDE Irvine32.inc
+.data
+num DWORD 12345678h
+
+
+.code
+
+main PROC
+MOV EAX,0
+MOV ECX,0
+MOV EBX,0
+MOV EBX,num
+MOV EDX,10000 h
+MOV AX,BX
+MOVZX ECX, WORD PTR [num+2]
+mul EDX
+
+ADD EAX,ECX
+XCHG num,EAX
+
+
+call DumpRegs
+call WriteDec
+exit
+main ENDP
+END main  
+
+............MOVING WORD ARRAY TO DWORD ARRAY.........
+INCLUDE Irvine32.inc
+.data
+arr WORD 12,13,14,15
+arr2 DWORD ?,?,?,?
+count BYTE ?
+count2 BYTE ?
+
+.code
+
+main PROC
+MOV EAX,0
+mov ecx,4
+MOV ESI,0
+MOV EDI,0
+L1:
+	MOVZX EAX , [arr+ESI]
+	MOV [arr2+EDI],EAX
+	add ESI,2
+	add EDI,4
+	loop L1
+
+call DumpRegs
+call WriteDec
+exit
+main ENDP
+END main  
+.............FABBONACI..............
+INCLUDE Irvine32.inc
+.data
+
+arr2 DWORD ?,?,?,?
+
+
+.code
+
+main PROC
+MOV EAX,0
+mov ecx,10
+MOV EBX,1
+MOV EDX,1
+MOV ESI,0
+MOV EDI,0
+
+MOV [arr2+ESI],EBX
+L1:
+	MOV [arr2+ESI+4],EDX
+	ADD EDX, EBX
+	MOV EBX,EDX
+	ADD ESI,4
+	loop L1
+
+call DumpRegs
+call WriteDec
+exit
+main ENDP
+END main
+
+...................Printing uppercase and lowercase characters...................
+
+INCLUDE Irvine32.inc
+.data
+a BYTE 'A'
+b BYTE 'a'
+
+
+.code
+
+main PROC
+MOV EAX,0
+MOV EBX,0
+MOV ECX,26
+L1:
+	MOV AL,a
+	call	WriteChar
+	MOV AL,b
+	call	WriteChar
+	call	Crlf
+	INC a
+	INC b
+	loop L1	
+
+
+
+
+call DumpRegs
+exit
+main ENDP
+END main
+
+...................

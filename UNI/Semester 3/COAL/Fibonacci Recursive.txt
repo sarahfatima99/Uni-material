@@ -1,0 +1,42 @@
+include Irvine32.inc
+.data
+msg1 BYTE '18th position: ',0
+msg2 BYTE '2nd position: ',0
+.code
+
+fib PROC
+	PUSH EDX
+	MOV EDX,EAX
+     ADD EAX,EBX
+	 MOV EBX,EDX
+	 POP EDX
+	  INC EDX
+	  CMP EDX,18
+	  JE _break
+	  INVOKE fib
+	  ret
+_break:
+MOV EDX,OFFSET msg1
+call WriteString
+call WriteDec
+call Crlf
+ret
+fib ENDP
+	
+main PROC
+	
+	MOV EAX,1
+	MOV EBX,1
+	MOV EDX,OFFSET msg2
+	call WriteString
+	call WriteDec
+	call Crlf
+	MOV EDX,2
+    MOV ECX,16
+	INVOKE fib
+    call Crlf
+    exit
+main ENDP
+
+
+END main

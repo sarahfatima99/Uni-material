@@ -1,0 +1,180 @@
+......................moving whole string into the other one.........................
+
+INCLUDE Irvine32.inc
+.data
+arr1 BYTE "Aiman000",0
+arr2 BYTE "Siddiqui",0
+
+.code
+main PROC
+MOV ECX,LENGTHOF arr1
+mov ESI,OFFSET arr1
+MOV EDI,OFFSET arr2
+rep MOVSB
+
+exit
+main ENDP
+
+END main
+
+......................moving first character of string into the other one.........................
+
+INCLUDE Irvine32.inc
+.data
+arr1 BYTE "Aiman000",0
+arr2 BYTE "Siddiqui",0
+
+.code
+main PROC
+mov ESI,OFFSET arr1
+MOV EDI,OFFSET arr2
+MOVSB
+
+exit
+main ENDP
+
+END main
+
+....................moving in the reverse order with the help of direction flag..................
+INCLUDE Irvine32.inc
+.data
+arr1 BYTE 1,2,3,4,5
+arr2 BYTE 11,22,33,44,55
+
+.code
+main PROC
+
+mov EDI,OFFSET arr1
+ADD EDI,4
+MOV ESI,OFFSET arr2
+ADD ESI,4
+MOV ECX,5
+std
+rep MOVSB
+
+exit
+main ENDP
+
+END main
+..............compare the letter and find it in the string and return address.....................
+INCLUDE Irvine32.inc
+.data
+arr1 BYTE 1,2,3,4,5
+arr2 BYTE 11,22,33,44,55
+count BYTE 0
+.code
+main PROC
+
+mov EDI,OFFSET arr2
+MOV AL,44
+MOV ECX,LENGTHOF arr2
+cld
+INC count
+repne scasb
+JNZ quit
+dec EDI
+quit:
+MOV EAX,LENGTHOF arr2
+SUB EAX,ECX
+call WriteDec
+exit
+main ENDP
+
+END main
+
+.............copying a single data from accumulator into the string............................
+INCLUDE Irvine32.inc
+.data
+arr1 BYTE 1,2,3,4,5
+arr2 BYTE 11,22,33,44,55
+
+.code
+main PROC
+
+mov EDI,OFFSET arr2
+MOV AL,88
+MOV ECX,LENGTHOF arr2
+cld
+rep STOSB
+
+exit
+main ENDP
+
+END main
+
+.............multiplying whole array by a single data..........................................
+INCLUDE Irvine32.inc
+.data
+arr1 BYTE 1,2,3,4,5
+arr2 BYTE 11,22,33,44,55
+multi BYTE 2
+.code
+main PROC
+
+mov EDI,OFFSET arr1
+MOV ESI,EDI
+MOV ECX,LENGTHOF arr1
+cld
+L1:
+	LODSB
+	mul multi
+	STOSB
+loop L1
+
+exit
+main ENDP
+
+END main
+
+......................HIGH LEVEL LANGUAGE.......................
+.CPP FILE:
+
+// ConsoleApplication1.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include<iostream>
+using namespace std;
+
+extern "C"
+{
+	void asmProc();
+	int Input();
+	void Output(int a);
+}
+int main()
+{
+	asmProc();
+}
+
+int Input()
+{
+	int a;
+	cin >> a;
+	return a;
+}
+void Output(int ab)
+{
+	cout<< ab;
+}
+
+.ASM FILE:
+
+.686
+.MODEL FLAT, C
+.STACK 2048
+
+Input PROTO C
+Output PROTO C, ab:DWORD
+.data
+var1 DWORD ?
+
+.code
+asmProc PROC ; cannot declare it as a main
+INVOKE INPUT;will keep the return value in EAX
+MOV var1,EAX
+INVOKE Output,var1
+ret 
+asmProc ENDP
+
+END

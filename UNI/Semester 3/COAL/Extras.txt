@@ -1,0 +1,86 @@
+INCLUDE Irvine32.inc
+.data
+
+arr WORD 11h,12h,13h,14h,15h
+
+
+
+.code
+
+main PROC
+	mov esi,OFFSET arr
+mov al,TYPE arr                ;al=2
+mov bl,SIZEOF arr              ;bl=10
+mov cl,LENGTHOF arr            ;cl=5
+
+;call DumpRegs
+call WriteDec
+exit
+main ENDP
+END main  
+
+...........multiplying consecutive numbers and saving it in another array........................
+INCLUDE Irvine32.inc
+.data
+
+arr BYTE 1,2,3,4,5
+arr2 BYTE ?,?,?,?
+.code
+
+main PROC
+MOV EAX,0
+MOV EBX,0
+MOV ESI,OFFSET arr
+MOV EDI,OFFSET arr2
+mov ecx,5
+L1:
+
+	MOV AL,[ESI]
+	INC ESI
+	MOV BL,[ESI]
+	
+	MUL BL
+	MOV [EDI],Al
+	INC EDI
+	
+	
+	loop L1
+
+;call DumpRegs
+call WriteDec
+exit
+main ENDP
+END main  
+
+.........................NESTED LOOP ....................
+INCLUDE Irvine32.inc
+.data
+
+A BYTE 0
+.code
+
+main PROC
+MOV EAX,0
+
+
+mov ecx,5
+Outerloop:
+	MOV EBX,ECX
+	MOV ECX,3
+	InnerLoop:
+		Mov Al,a
+		INC Al
+		MOV a,Al
+
+		loop InnerLoop
+	MOV ECX,EBX
+	
+	loop Outerloop
+	
+
+
+;call DumpRegs
+call WriteDec
+exit
+main ENDP
+END mai

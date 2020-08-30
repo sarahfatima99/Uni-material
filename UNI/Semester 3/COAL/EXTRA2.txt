@@ -1,0 +1,118 @@
+TITLE My First Program (Test.asm)
+INCLUDE Irvine32.inc
+.data
+arr WORD 1,2,3,4,5
+arr2 WORD 10,11,12,14,15
+.code
+main PROC
+mov esi,1
+mov ax,arr[esi* TYPE arr]
+exit
+main ENDP
+END main
+
+------------------------------------------------------------------------------------------------------------------
+
+TITLE My First Program (Test.asm)
+INCLUDE Irvine32.inc
+.data
+
+
+
+.code
+main PROC 
+mov eax,15
+call myHex
+exit
+main ENDP
+myHex PROC
+call WriteHex
+ret
+myHex ENDP
+END main
+
+-----------------------------------------------------------------------------------------------------------------
+
+TITLE My First Program (Test.asm)
+INCLUDE Irvine32.inc
+.data
+var1 DWORD 10
+var2 DWORD 20
+
+
+.code
+main PROC 
+push var1
+push var2
+call myProc
+exit
+main ENDP
+myProc PROC
+push ebp
+mov ebp,esp
+pop ebp
+ret
+myProc ENDP
+
+END main
+
+--------------------------------------------------------------------------------------------
+TITLE My First Program (Test.asm)
+INCLUDE Irvine32.inc
+.data
+var1 DWORD 3
+
+.code
+main PROC 
+push var1
+call mySquare
+call myCube
+call DumpRegs
+pop var1
+exit
+main ENDP
+mySquare PROC
+push ebp
+mov ebp,esp
+mov eax,[ebp+8]
+mul eax
+pop ebp 
+call WriteInt
+ret
+mySquare ENDP
+myCube PROC
+push ebp
+mov ebp,esp
+mov eax,[ebp+8]
+mov ebx,[ebp+8]
+mul ebx
+mul ebx
+pop ebp 
+call WriteInt
+ret
+myCube ENDP
+
+END main
+
+
+-----------------------------------------------------------------------------------------------
+writestring //study
+
+
+TITLE My First Program (Test.asm)
+INCLUDE Irvine32.inc
+.data
+
+myString BYTE "Hello",0
+.code
+main PROC 
+mov edx, OFFSET myString
+mov ecx, LENGTHOF myString
+call WriteString
+mov al,'k'
+call WriteChar
+call ReadChar ;char element read will move to al ; will work as scanf and cin
+call ReadDec ;same will do 
+exit
+main ENDP
+END main
